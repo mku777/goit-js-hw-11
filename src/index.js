@@ -38,9 +38,6 @@ async function submitSearchForm(event) {
   if (response.totalHits > 40) {
     loadMoreBtn.classList.remove('is-hidden');
   } else {
-    Notify.warning(
-      `We're sorry, but you've reached the end of search results.`
-    );
     loadMoreBtn.classList.add('is-hidden');
   }
 
