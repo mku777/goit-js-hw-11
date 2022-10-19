@@ -1,5 +1,5 @@
-import fetch from "./js/fetch";
-import markupImageCard from './js/markup'
+import fetch from './js/fetch';
+import markupImageCard from './js/markup';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -10,9 +10,8 @@ let lightbox = new SimpleLightbox('.photo-card a', {
   captionDelay: 250,
 });
 
-
 const gallery = document.querySelector('.gallery');
-const endText = document.querySelector('.end-text');
+
 const searchForm = document.querySelector('.search-form');
 const loadMoreBtn = document.querySelector('.load-more');
 
@@ -29,7 +28,7 @@ async function submitSearchForm(event) {
   currentPage = 1;
 
   if (searchQuery === '') {
-    Notify.info("Sorry, you need to write something in the form")
+    Notify.info('Sorry, you need to write something in the form');
     return;
   }
 
@@ -38,11 +37,11 @@ async function submitSearchForm(event) {
 
   if (response.totalHits > 40) {
     loadMoreBtn.classList.remove('is-hidden');
-    endText.classList.add('is-hidden');
   } else {
-    Notify.warning(`We're sorry, but you've reached the end of search results.`);
+    Notify.warning(
+      `We're sorry, but you've reached the end of search results.`
+    );
     loadMoreBtn.classList.add('is-hidden');
-    endText.classList.remove('is-hidden');
   }
 
   try {
@@ -55,9 +54,10 @@ async function submitSearchForm(event) {
 
     if (response.totalHits === 0) {
       gallery.innerHTML = '';
-      Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
       loadMoreBtn.classList.add('is-hidden');
-      endText.classList.add('is-hidden');
     }
   } catch (error) {
     console.log(error);
@@ -65,18 +65,16 @@ async function submitSearchForm(event) {
 }
 
 async function clickLoadMoreBtn() {
-    currentPage += 1;
-    const response = await fetch(searchQuery, currentPage);
-    markupImageCard(response.hits, gallery);
-    lightbox.refresh();
-    currentHits += response.hits.length;
-  
-    if (currentHits === response.totalHits) {
-      Notify.warning(`We're sorry, but you've reached the end of search results.`);
-      loadMoreBtn.classList.add('is-hidden');
-      endText.classList.remove('is-hidden');
-    }
+  currentPage += 1;
+  const response = await fetch(searchQuery, currentPage);
+  markupImageCard(response.hits, gallery);
+  lightbox.refresh();
+  currentHits += response.hits.length;
+
+  if (currentHits === response.totalHits) {
+    Notify.warning(
+      `We're sorry, but you've reached the end of search results.`
+    );
+    loadMoreBtn.classList.add('is-hidden');
   }
-
-
-
+}
