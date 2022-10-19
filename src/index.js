@@ -1,8 +1,14 @@
 import fetch from "./js/fetch";
 import markupImageCard from './js/markup'
-import lightbox from "./js/simplelightbox";
-import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+let lightbox = new SimpleLightbox('.photo-card a', {
+  captions: true,
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
 
 const gallery = document.querySelector('.gallery');
@@ -15,6 +21,7 @@ let currentHits = 0;
 let searchQuery = '';
 
 searchForm.addEventListener('submit', submitSearchForm);
+loadMoreBtn.addEventListener('click', clickLoadMoreBtn);
 
 async function submitSearchForm(event) {
   event.preventDefault();
@@ -55,4 +62,19 @@ async function submitSearchForm(event) {
     console.log(error);
   }
 }
+
+async function clickLoadMoreBtn() {
+    currentPage += 1;
+    const response = await fetch(searchQuery, currentPage);
+    markupImageCard(response.hits, gallery);
+    lightbox.refresh();
+    currentHits += response.hits.length;
+  
+    if (currentHits === response.totalHits) {
+      loadMoreBtn.classList.add('is-hidden');
+      endCollectionText.classList.remove('is-hidden');
+    }
+  }
+
+
 
