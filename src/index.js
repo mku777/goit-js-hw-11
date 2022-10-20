@@ -34,10 +34,11 @@ async function submitSearchForm(event) {
 
   const response = await fetch(searchQuery, currentPage);
   currentHits = response.hits.length;
-
+  console.log(response)
   if (response.totalHits > 40) {
     loadMoreBtn.classList.remove('is-hidden');
-  } else {
+  } 
+  else {
     loadMoreBtn.classList.add('is-hidden');
   }
 
@@ -64,11 +65,12 @@ async function submitSearchForm(event) {
 async function clickLoadMoreBtn() {
   currentPage += 1;
   const response = await fetch(searchQuery, currentPage);
+  console.log(response)
   markupImageCard(response.hits, gallery);
   lightbox.refresh();
   currentHits += response.hits.length;
-
-  if (currentHits === response.totalHits) {
+console.log(currentHits);
+  if (currentHits >= response.totalHits) {
     Notify.warning(
       `We're sorry, but you've reached the end of search results.`
     );
